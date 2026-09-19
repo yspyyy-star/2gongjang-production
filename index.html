@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2공장 생산관리 시스템</title>
+<style>
+:root{--navy:#17243a;--blue:#2563eb;--bg:#f4f7fb;--line:#e5eaf2;--text:#172033;--muted:#718096;--green:#16a34a;--yellow:#d97706;--red:#dc2626;--card:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans KR",sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{display:flex;min-height:100vh}
+.sidebar{width:230px;background:var(--navy);color:#fff;padding:22px 14px;position:fixed;top:0;bottom:0}
+.brand{font-size:20px;font-weight:800;padding:10px 12px 24px}.brand small{display:block;font-size:11px;color:#aeb9cb;margin-top:5px}
+.nav button{display:block;width:100%;padding:13px 14px;margin:3px 0;background:transparent;color:#cbd5e1;text-align:left;border-radius:9px}
+.nav button.active,.nav button:hover{background:#263756;color:#fff}.nav button span{margin-right:10px}
+.main{margin-left:230px;width:calc(100% - 230px);padding:26px 30px 80px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.top h1{margin:0;font-size:25px}.top p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.user{background:#fff;border:1px solid var(--line);padding:9px 13px;border-radius:10px}
+.page{display:none}.page.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:0 2px 8px #17243a08}.label{font-size:12px;color:var(--muted)}.big{font-size:25px;font-weight:800;margin:8px 0}.delta{font-size:12px}.up{color:var(--green)}.down{color:var(--blue)}
+.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:16px}.section{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px}.section h2{font-size:16px;margin:0 0 15px}.line-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.line-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px;transition:.15s}.line-card:hover{box-shadow:0 5px 18px #17243a14;transform:translateY(-1px)}
+.status{display:inline-flex;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700}.running{background:#dcfce7;color:#15803d}.ready{background:#fef3c7;color:#a16207}.done{background:#dbeafe;color:#1d4ed8}.wait{background:#eef2f7;color:#64748b}.problem{background:#fee2e2;color:#b91c1c}
+.line-head{display:flex;justify-content:space-between;align-items:center}.line-name{font-weight:800}.product{font-size:14px;font-weight:700;margin:12px 0 8px}.muted{color:var(--muted)}.mini{font-size:12px;color:var(--muted);line-height:1.8}.progress{height:7px;background:#edf1f6;border-radius:20px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;background:var(--blue);border-radius:20px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--muted);font-size:11px;background:#fafbfd}tr:hover td{background:#fafcff}
+.form{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #d9e0ea;border-radius:9px;background:#fff}.field textarea{min-height:85px;resize:vertical}.full{grid-column:1/-1}
+.primary{background:var(--blue);color:#fff;padding:12px 18px;border-radius:9px;font-weight:700}.secondary{background:#fff;border:1px solid #d9e0ea;padding:11px 15px;border-radius:9px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.toolbar input,.toolbar select{padding:10px;border:1px solid #d9e0ea;border-radius:8px;background:#fff}
+.alert{padding:12px 14px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;margin-top:10px;font-size:13px}
+.mobile-nav{display:none}
+.modal{display:none;position:fixed;inset:0;background:#0007;align-items:center;justify-content:center;padding:20px;z-index:5}.modal.show{display:flex}.modal-box{background:#fff;width:min(600px,100%);max-height:90vh;overflow:auto;border-radius:15px;padding:22px}.modal-top{display:flex;justify-content:space-between;align-items:center}.close{background:#eef2f7;padding:7px 10px;border-radius:8px}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--navy);color:#fff;padding:13px 17px;border-radius:9px;display:none;z-index:10}
+.chart{height:190px;display:flex;align-items:end;gap:12px;padding:10px 5px 0}.bar{flex:1;background:var(--blue);border-radius:5px 5px 0 0;min-height:8px;position:relative}.bar b{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:10px;white-space:nowrap}.bar small{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);color:var(--muted);white-space:nowrap}
+@media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}.line-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.sidebar{display:none}.main{margin:0;width:100%;padding:16px 14px 78px}.top h1{font-size:20px}.top .user{display:none}.cards{grid-template-columns:repeat(2,1fr);gap:8px}.card{padding:13px}.big{font-size:20px}.grid2{grid-template-columns:1fr}.line-grid{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}.mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:4}.mobile-nav button{background:#fff;padding:9px 3px;color:#64748b;font-size:10px}.mobile-nav button.active{color:var(--blue);font-weight:800}.mobile-nav span{display:block;font-size:18px;margin-bottom:2px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">2공장 생산관리<small>Production Management</small></div>
+  <nav class="nav">
+    <button class="active" onclick="showPage('dashboard',this)"><span>⌂</span>대시보드</button>
+    <button onclick="showPage('lines',this)"><span>🏭</span>라인현황</button>
+    <button onclick="showPage('input',this)"><span>＋</span>생산실적 입력</button>
+    <button onclick="showPage('history',this)"><span>▤</span>생산이력</button>
+    <button onclick="showPage('conditions',this)"><span>⚙</span>작업조건 이력</button>
+    <button onclick="showPage('materials',this)"><span>📦</span>벌크·자재 요청</button>
+    <button onclick="showPage('stats',this)"><span>▥</span>통계분석</button>
+  </nav>
+</aside>
+<main class="main">
+  <div class="top"><div><h1 id="title">대시보드</h1><p id="date"></p></div><div class="user">☁️ 온라인 DB</div></div>
+
+  <section id="dashboard" class="page active">
+    <div class="cards" id="kpis"></div>
+    <div class="grid2">
+      <div class="section"><h2>최근 7일 생산량 추이</h2><div class="chart" id="chart"></div></div>
+      <div class="section"><h2>전일 대비 변동</h2><div id="changes"></div></div>
+    </div>
+    <div class="section" style="margin-top:16px"><h2>오늘의 변동 입력</h2><div id="alerts"></div></div>
+  </section>
+
+  <section id="lines" class="page">
+    <div class="section"><h2>8개 라인 실시간 현황</h2><div class="line-grid" id="lineGrid"></div></div>
+  </section>
+
+  <section id="input" class="page">
+    <div class="section">
+      <h2>생산실적 입력</h2>
+      <form id="productionForm" class="form">
+        <div class="field"><label>날짜</label><input id="fdate" type="date" required></div>
+        <div class="field"><label>라인</label><select id="fline"></select></div>
+        <div class="field"><label>품목</label><select id="fproduct"></select></div>
+        <div class="field"><label>로트번호</label><input id="flot" placeholder="예: 2F174I" required></div>
+        <div class="field"><label>오늘 생산량 (EA)</label><input id="fprod" type="number" min="0" required></div>
+        <div class="field"><label>오늘 사용량 (KG)</label><input id="fuse" type="number" min="0" step="0.1" required></div>
+        <div class="field"><label>불량수량 (EA)</label><input id="fdefect" type="number" min="0" value="0"></div>
+        <div class="field"><label>작업자</label><input id="fworker" placeholder="작업자명"></div>
+        <div class="field full"><label>특이사항</label><textarea id="fmemo" placeholder="아이마크, 누액, 캡핑, 충진 등 특이사항을 입력하세요."></textarea></div>
+        <div class="full actions"><button type="reset" class="secondary">초기화</button><button class="primary">생산실적 저장</button></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="history" class="page">
+    <div class="section"><h2>생산이력</h2>
+      <div class="toolbar"><input id="searchHistory" placeholder="품목/로트/작업자 검색"><select id="historyLine"><option>전체 라인</option></select><button class="primary" onclick="renderHistory()">검색</button></div>
+      <div style="overflow:auto"><table><thead><tr><th>날짜</th><th>라인</th><th>품목</th><th>로트</th><th>생산량</th><th>사용량</th><th>불량</th><th>불량률</th><th>작업자</th></tr></thead><tbody id="historyBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="conditions" class="page">
+    <div class="section"><h2>작업조건 이력</h2>
+      <div class="toolbar"><input id="conditionSearch" placeholder="품목 검색"><button class="primary" onclick="renderConditions()">검색</button></div>
+      <div style="overflow:auto"><table><thead><tr><th>품목</th><th>사용설비</th><th>노즐</th><th>메쉬</th><th>펌프</th><th>특이사항</th><th>작업일</th></tr></thead><tbody id="conditionBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="materials" class="page">
+    <div class="section"><div style="display:flex;justify-content:space-between;align-items:center"><h2>벌크·자재 요청</h2><button class="primary" onclick="openMaterial()">＋ 요청 등록</button></div>
+      <div style="overflow:auto"><table><thead><tr><th>요청일</th><th>라인</th><th>품목</th><th>벌크</th><th>상태</th><th>요청자</th></tr></thead><tbody id="materialBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="stats" class="page">
+    <div class="section"><h2>통계분석</h2><div class="cards" style="margin-bottom:18px" id="statCards"></div><h2>라인별 누적 생산량</h2><div class="chart" id="lineChart"></div></div>
+  </section>
+</main>
+</div>
+<div class="mobile-nav">
+  <button class="active" onclick="showPage('dashboard',this)"><span>⌂</span>홈</button>
+  <button onclick="showPage('lines',this)"><span>🏭</span>라인</button>
+  <button onclick="showPage('input',this)"><span>＋</span>입력</button>
+  <button onclick="showPage('history',this)"><span>▤</span>이력</button>
+  <button onclick="showPage('materials',this)"><span>☰</span>더보기</button>
+</div>
+
+<div class="modal" id="lineModal"><div class="modal-box"><div class="modal-top"><h2 id="modalTitle">라인 상세</h2><button class="close" onclick="closeModal()">닫기</button></div><div id="modalBody"></div></div></div>
+<div class="modal" id="materialModal"><div class="modal-box"><div class="modal-top"><h2>벌크·자재 요청</h2><button class="close" onclick="closeMaterial()">닫기</button></div><form id="materialForm" class="form" style="margin-top:15px">
+<div class="field"><label>라인</label><select id="mline"></select></div><div class="field"><label>품목</label><select id="mproduct"></select></div><div class="field"><label>벌크 필요량 (KG)</label><input id="mbulk" type="number" step="0.1"></div><div class="field"><label>요청자</label><input id="mworker"></div><div class="field full"><label>비고</label><textarea id="mmemo"></textarea></div><div class="full actions"><button type="button" class="secondary" onclick="closeMaterial()">취소</button><button class="primary">요청 저장</button></div></form></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+// ===== Supabase 온라인 DB 설정 =====
+// 아래 두 값을 본인 Supabase 프로젝트 값으로 교체하세요.
+const SUPABASE_URL = 'https://jhavdgryibcxnqqtulga.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_xLSHbfXTlO0O3inK8eUYLA_M76BULNu';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function loadRecordsFromDB(){
+  const {data,error}=await supabaseClient.from('production_records')
+    .select('*').order('created_at',{ascending:false});
+  if(error){ console.error(error); toast('DB 불러오기 오류: '+error.message); return; }
+  records=(data||[]).map(r=>({
+    id:r.id,date:r.work_date,line:r.line_no,product:r.product,lot:r.lot,
+    prod:Number(r.production_qty||0),use:Number(r.usage_kg||0),
+    defect:Number(r.defect_qty||0),worker:r.worker||'',memo:r.memo||''
+  }));
+  renderAll();
+}
+
+async function insertRecordToDB(r){
+  const {error}=await supabaseClient.from('production_records').insert({
+    work_date:r.date,line_no:r.line,product:r.product,lot:r.lot,
+    production_qty:r.prod,usage_kg:r.use,defect_qty:r.defect,
+    worker:r.worker,memo:r.memo
+  });
+  if(error) throw error;
+}
+
+async function loadMaterialsFromDB(){
+  const {data,error}=await supabaseClient.from('material_requests')
+    .select('*').order('created_at',{ascending:false});
+  if(error){ console.error(error); toast('자재 DB 불러오기 오류: '+error.message); return; }
+  materials=(data||[]).map(m=>({
+    id:m.id,date:m.request_date,line:m.line_no,product:m.product,
+    bulk:Number(m.bulk_kg||0),status:m.status,worker:m.worker||'',memo:m.memo||''
+  }));
+  renderMaterials();
+}
+
+async function insertMaterialToDB(m){
+  const {error}=await supabaseClient.from('material_requests').insert({
+    request_date:m.date,line_no:m.line,product:m.product,bulk_kg:m.bulk,
+    status:m.status,worker:m.worker,memo:m.memo
+  });
+  if(error) throw error;
+}
+
+const today=new Date().toISOString().slice(0,10);
+const lines=[
+ {no:1,status:'running',product:'칼슘 다크서클 아이크림',lot:'2F171I',target:100000,current:51588,speed:25,end:'10:40',fill:'100 EA'},
+ {no:2,status:'running',product:'노크 퍼밍 바디 버터',lot:'2F171I',target:15000,current:15840,speed:18,end:'완료',fill:'201.5 g'},
+ {no:3,status:'running',product:'메디큐브 엑소좀 앰플',lot:'2F174I',target:132000,current:88900,speed:25,end:'11:20',fill:'50.0 g'},
+ {no:4,status:'ready',product:'메디큐브 제로 모공 토너',lot:'2F175I',target:80000,current:0,speed:28,end:'-',fill:'150 g'},
+ {no:5,status:'running',product:'시오레 NMN 세럼',lot:'2F181I',target:90000,current:63800,speed:28,end:'12:10',fill:'30 g'},
+ {no:6,status:'running',product:'달바 화이트 트러플 세럼',lot:'2F184I',target:120000,current:73500,speed:30,end:'13:00',fill:'100 ml'},
+ {no:7,status:'wait',product:'대기',lot:'-',target:0,current:0,speed:0,end:'-',fill:'-'},
+ {no:8,status:'done',product:'완료 작업',lot:'2F160I',target:50000,current:50000,speed:26,end:'완료',fill:'50 g'}
+];
+const products=[...new Set(lines.map(x=>x.product).filter(x=>x!=='대기'&&x!=='완료 작업'))];
+let records=JSON.parse(localStorage.getItem('prodRecords')||'[]');
+if(!records.length){
+ records=[
+ {date:today,line:6,product:'달바 화이트 트러플 세럼',lot:'2F184I',prod:12500,use:1210,defect:85,worker:'김철수'},
+ {date:today,line:5,product:'시오레 NMN 세럼',lot:'2F181I',prod:8900,use:850,defect:42,worker:'이영희'},
+ {date:today,line:3,product:'메디큐브 엑소좀 앰플',lot:'2F174I',prod:6100,use:191.5,defect:82,worker:'홍길동'},
+ {date:today,line:2,product:'노크 퍼밍 바디 버터',lot:'2F171I',prod:3000,use:201.5,defect:0,worker:'최민수'},
+ {date:today,line:1,product:'칼슘 다크서클 아이크림',lot:'2F171I',prod:5200,use:530.2,defect:48,worker:'김준호'}
+ ];
+ saveRecords();
+}
+function saveRecords(){}
+function fmt(n){return Number(n||0).toLocaleString('ko-KR')}
+function statusText(s){return {running:'생산중',ready:'준비',done:'완료',wait:'대기',problem:'문제발생'}[s]}
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.nav button,.mobile-nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');
+ const titles={dashboard:'대시보드',lines:'라인현황',input:'생산실적 입력',history:'생산이력',conditions:'작업조건 이력',materials:'벌크·자재 요청',stats:'통계분석'};
+ document.getElementById('title').textContent=titles[id];
+ if(id==='history')renderHistory(); if(id==='conditions')renderConditions(); if(id==='materials')renderMaterials(); if(id==='stats')renderStats();
+}
+async function init(){
+ document.getElementById('date').textContent=`${today.replaceAll('-','.')} · 마지막 업데이트 ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}`;
+ document.getElementById('fdate').value=today;
+ ['fline','mline','historyLine'].forEach(id=>{
+   const s=document.getElementById(id); if(!s)return;
+   if(id==='historyLine')s.innerHTML='<option>전체 라인</option>';
+   lines.forEach(l=>{if(id==='historyLine'||l.no<=8){let o=document.createElement('option');o.value=l.no;o.textContent=l.no+'라인';s.appendChild(o)}})
+ });
+ ['fproduct','mproduct'].forEach(id=>{const s=document.getElementById(id);products.forEach(p=>{let o=document.createElement('option');o.textContent=p;o.value=p;s.appendChild(o)})});
+ renderAll();
+ document.getElementById('productionForm').addEventListener('submit',addRecord);
+ document.getElementById('materialForm').addEventListener('submit',addMaterial);
+}
+function renderAll(){renderKpis();renderLines();renderHistory();renderConditions();renderMaterials();renderStats()}
+function renderKpis(){
+ const prod=records.reduce((a,r)=>a+r.prod,0), use=records.reduce((a,r)=>a+r.use,0), defect=records.reduce((a,r)=>a+r.defect,0);
+ document.getElementById('kpis').innerHTML=`
+ <div class="card"><div class="label">오늘 제조량</div><div class="big">${fmt(prod)} EA</div><div class="delta up">▲ 8.2%</div></div>
+ <div class="card"><div class="label">오늘 사용량</div><div class="big">${fmt(use.toFixed(1))} KG</div><div class="delta down">▼ 3.1%</div></div>
+ <div class="card"><div class="label">오늘 불량수량</div><div class="big">${fmt(defect)} EA</div><div class="delta">불량률 ${(defect/prod*100||0).toFixed(2)}%</div></div>
+ <div class="card"><div class="label">가동라인</div><div class="big">${lines.filter(x=>x.status==='running').length} / 8</div></div>
+ <div class="card"><div class="label">대기라인</div><div class="big">${lines.filter(x=>x.status==='wait').length} / 8</div></div>
+ <div class="card"><div class="label">완료라인</div><div class="big">${lines.filter(x=>x.status==='done').length} / 8</div></div>`;
+ const vals=[92000,105000,98000,112000,100000,100000,prod];const max=Math.max(...vals);
+ document.getElementById('chart').innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${v/max*150}px"><b>${Math.round(v/1000)}K</b><small>${['9/13','9/14','9/15','9/16','9/17','9/18','9/19'][i]}</small></div>`).join('');
+ document.getElementById('changes').innerHTML=`<div class="card" style="margin-bottom:8px"><b>제조량</b><br><span class="muted">100,000 → ${fmt(prod)} EA</span><br><span class="up">+8,200 EA · +8.2%</span></div><div class="card" style="margin-bottom:8px"><b>사용량</b><br><span class="muted">500.0 → ${fmt(use.toFixed(1))} KG</span><br><span class="down">-15.5 KG · -3.1%</span></div><div class="card"><b>불량량</b><br><span class="muted">1,100 → ${fmt(defect)} EA</span><br><span class="up">+150 EA · +13.6%</span></div>`;
+ document.getElementById('alerts').innerHTML='<div class="alert">⚠ 생산량 변동주의 · 3라인 +18.4%</div><div class="alert">⚠ 사용량 변동주의 · 6라인 -12.1%</div>';
+}
+function renderLines(){
+ document.getElementById('lineGrid').innerHTML=lines.map(l=>{
+  const pct=l.target?Math.min(100,l.current/l.target*100):0;
+  return `<div class="line-card" onclick="openLine(${l.no})"><div class="line-head"><span class="line-name">${l.no}라인</span><span class="status ${l.status}">${statusText(l.status)}</span></div><div class="product">${l.product}</div><div class="mini">로트 ${l.lot}<br>현재 ${fmt(l.current)} / ${fmt(l.target)} EA<br>생산속도 ${l.speed||'-'} EA/min · 충전 ${l.fill}</div><div class="progress"><i style="width:${pct}%"></i></div><div class="mini">예상 종료 <b>${l.end}</b></div></div>`
+ }).join('');
+}
+function openLine(no){const l=lines.find(x=>x.no===no);document.getElementById('modalTitle').textContent=`${no}라인 · ${statusText(l.status)}`;document.getElementById('modalBody').innerHTML=`<div class="card"><b>${l.product}</b><p class="mini">로트번호 ${l.lot}</p><div class="cards" style="grid-template-columns:repeat(2,1fr)"><div><span class="label">제조량</span><div class="big">${fmt(l.target)}</div></div><div><span class="label">현재 생산량</span><div class="big">${fmt(l.current)}</div></div><div><span class="label">잔량</span><div class="big">${fmt(Math.max(0,l.target-l.current))}</div></div><div><span class="label">생산속도</span><div class="big">${l.speed||'-'}</div></div></div><hr style="border:0;border-top:1px solid var(--line)"><p><b>특이사항</b><br><span class="muted">현재 등록된 특이사항이 없습니다.</span></p></div>`;document.getElementById('lineModal').classList.add('show')}
+function closeModal(){document.getElementById('lineModal').classList.remove('show')}
+function addRecord(e){e.preventDefault();records.unshift({date:fdate.value,line:+fline.value,product:fproduct.value,lot:flot.value.trim(),prod:+fprod.value,use:+fuse.value,defect:+fdefect.value||0,worker:fworker.value||'미입력',memo:fmemo.value});saveRecords();e.target.reset();fdate.value=today;renderAll();toast('✓ 생산실적이 저장되었습니다.');showPage('history',document.querySelector('.nav button:nth-child(4)'))}
+function renderHistory(){let q=(document.getElementById('searchHistory')?.value||'').toLowerCase(), line=document.getElementById('historyLine')?.value||'전체 라인';let rows=records.filter(r=>(line==='전체 라인'||r.line==line)&&`${r.product} ${r.lot} ${r.worker}`.toLowerCase().includes(q));document.getElementById('historyBody').innerHTML=rows.map(r=>`<tr><td>${r.date.slice(5)}</td><td>${r.line}라인</td><td>${r.product}</td><td>${r.lot}</td><td>${fmt(r.prod)}</td><td>${fmt(r.use.toFixed(1))}</td><td>${fmt(r.defect)}</td><td>${(r.defect/r.prod*100||0).toFixed(2)}%</td><td>${r.worker}</td></tr>`).join('')||'<tr><td colspan="9" class="muted">검색 결과가 없습니다.</td></tr>'}
+const conditions=[
+ ['달바 화이트 트러플 세럼','멀티 셀 라인','10파이','벌크 1250 / 노즐 150','에어펌프','SUS필터 사용, 단상자 없음','2026-09-15'],
+ ['메디큐브 엑소좀 앰플','멀티 셀 라인','8파이','사용 불가','이송펌프','용기 옆면 착인','2026-09-15'],
+ ['칼슘 다크서클 아이크림','이중 튜브','8파이','1250','에어펌프','아이마크 센서 점검','2026-09-08'],
+ ['노크 퍼밍 바디 버터','수동충진','12파이','1250','모터펌프','충진량 확인 필요','2026-08-20']
+];
+function renderConditions(){let q=(document.getElementById('conditionSearch')?.value||'').toLowerCase();document.getElementById('conditionBody').innerHTML=conditions.filter(c=>c.join(' ').toLowerCase().includes(q)).map(c=>`<tr>${c.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}
+let materials=[];
+function saveMaterials(){}
+function renderMaterials(){document.getElementById('materialBody').innerHTML=materials.map(m=>`<tr><td>${m.date.slice(5)}</td><td>${m.line}라인</td><td>${m.product}</td><td>${fmt(m.bulk)} KG</td><td><span class="status ${m.status==='완료'?'done':m.status==='요청'?'ready':'running'}">${m.status}</span></td><td>${m.worker}</td></tr>`).join('')}
+function openMaterial(){document.getElementById('materialModal').classList.add('show')}
+function closeMaterial(){document.getElementById('materialModal').classList.remove('show')}
+function addMaterial(e){e.preventDefault();materials.unshift({date:today,line:+mline.value,product:mproduct.value,bulk:+mbulk.value||0,status:'요청',worker:mworker.value||'미입력'});saveMaterials();renderMaterials();closeMaterial();e.target.reset();toast('✓ 자재 요청이 등록되었습니다.')}
+function renderStats(){let total=records.reduce((a,r)=>a+r.prod,0),use=records.reduce((a,r)=>a+r.use,0),def=records.reduce((a,r)=>a+r.defect,0);document.getElementById('statCards').innerHTML=`<div class="card"><div class="label">누적 생산량</div><div class="big">${fmt(total)} EA</div></div><div class="card"><div class="label">누적 사용량</div><div class="big">${fmt(use.toFixed(1))} KG</div></div><div class="card"><div class="label">누적 불량률</div><div class="big">${(def/total*100||0).toFixed(2)}%</div></div>`;let vals=lines.map(l=>records.filter(r=>r.line===l.no).reduce((a,r)=>a+r.prod,0)),max=Math.max(...vals,1);document.getElementById('lineChart').innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${Math.max(8,v/max*150)}px"><b>${Math.round(v/1000)}K</b><small>${i+1}라인</small></div>`).join('')}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
+init();
+</script>
+</body>
+</html>
