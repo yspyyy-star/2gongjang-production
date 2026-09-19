@@ -180,17 +180,7 @@ const lines=[
  {no:8,status:'done',product:'완료 작업',lot:'2F160I',target:50000,current:50000,speed:26,end:'완료',fill:'50 g'}
 ];
 const products=[...new Set(lines.map(x=>x.product).filter(x=>x!=='대기'&&x!=='완료 작업'))];
-let records=JSON.parse(localStorage.getItem('prodRecords')||'[]');
-if(!records.length){
- records=[
- {date:today,line:6,product:'달바 화이트 트러플 세럼',lot:'2F184I',prod:12500,use:1210,defect:85,worker:'김철수'},
- {date:today,line:5,product:'시오레 NMN 세럼',lot:'2F181I',prod:8900,use:850,defect:42,worker:'이영희'},
- {date:today,line:3,product:'메디큐브 엑소좀 앰플',lot:'2F174I',prod:6100,use:191.5,defect:82,worker:'홍길동'},
- {date:today,line:2,product:'노크 퍼밍 바디 버터',lot:'2F171I',prod:3000,use:201.5,defect:0,worker:'최민수'},
- {date:today,line:1,product:'칼슘 다크서클 아이크림',lot:'2F171I',prod:5200,use:530.2,defect:48,worker:'김준호'}
- ];
- saveRecords();
-}
+let records=[];
 function saveRecords(){}
 function fmt(n){return Number(n||0).toLocaleString('ko-KR')}
 function statusText(s){return {running:'생산중',ready:'준비',done:'완료',wait:'대기',problem:'문제발생'}[s]}
@@ -210,9 +200,11 @@ async function init(){
    lines.forEach(l=>{if(id==='historyLine'||l.no<=8){let o=document.createElement('option');o.value=l.no;o.textContent=l.no+'라인';s.appendChild(o)}})
  });
  ['fproduct','mproduct'].forEach(id=>{const s=document.getElementById(id);products.forEach(p=>{let o=document.createElement('option');o.textContent=p;o.value=p;s.appendChild(o)})});
- renderAll();
+ await loadRecordsFromDB();
+ await loadMaterialsFromDB();
  document.getElementById('productionForm').addEventListener('submit',addRecord);
  document.getElementById('materialForm').addEventListener('submit',addMaterial);
+ renderAll();
 }
 function renderAll(){renderKpis();renderLines();renderHistory();renderConditions();renderMaterials();renderStats()}
 function renderKpis(){
@@ -237,7 +229,15 @@ function renderLines(){
 }
 function openLine(no){const l=lines.find(x=>x.no===no);document.getElementById('modalTitle').textContent=`${no}라인 · ${statusText(l.status)}`;document.getElementById('modalBody').innerHTML=`<div class="card"><b>${l.product}</b><p class="mini">로트번호 ${l.lot}</p><div class="cards" style="grid-template-columns:repeat(2,1fr)"><div><span class="label">제조량</span><div class="big">${fmt(l.target)}</div></div><div><span class="label">현재 생산량</span><div class="big">${fmt(l.current)}</div></div><div><span class="label">잔량</span><div class="big">${fmt(Math.max(0,l.target-l.current))}</div></div><div><span class="label">생산속도</span><div class="big">${l.speed||'-'}</div></div></div><hr style="border:0;border-top:1px solid var(--line)"><p><b>특이사항</b><br><span class="muted">현재 등록된 특이사항이 없습니다.</span></p></div>`;document.getElementById('lineModal').classList.add('show')}
 function closeModal(){document.getElementById('lineModal').classList.remove('show')}
-function addRecord(e){e.preventDefault();records.unshift({date:fdate.value,line:+fline.value,product:fproduct.value,lot:flot.value.trim(),prod:+fprod.value,use:+fuse.value,defect:+fdefect.value||0,worker:fworker.value||'미입력',memo:fmemo.value});saveRecords();e.target.reset();fdate.value=today;renderAll();toast('✓ 생산실적이 저장되었습니다.');showPage('history',document.querySelector('.nav button:nth-child(4)'))}
+async function addRecord(e){
+ e.preventDefault();
+ const r={date:fdate.value,line:+fline.value,product:fproduct.value,lot:flot.value.trim(),prod:+fprod.value,use:+fuse.value,defect:+fdefect.value||0,worker:fworker.value||'미입력',memo:fmemo.value};
+ try{
+   await insertRecordToDB(r);
+   await loadRecordsFromDB();
+   e.target.reset();fdate.value=today;toast('✓ 생산실적이 온라인 DB에 저장되었습니다.');showPage('history',document.querySelector('.nav button:nth-child(4)'));
+ }catch(err){console.error(err);toast('저장 오류: '+err.message);}
+}
 function renderHistory(){let q=(document.getElementById('searchHistory')?.value||'').toLowerCase(), line=document.getElementById('historyLine')?.value||'전체 라인';let rows=records.filter(r=>(line==='전체 라인'||r.line==line)&&`${r.product} ${r.lot} ${r.worker}`.toLowerCase().includes(q));document.getElementById('historyBody').innerHTML=rows.map(r=>`<tr><td>${r.date.slice(5)}</td><td>${r.line}라인</td><td>${r.product}</td><td>${r.lot}</td><td>${fmt(r.prod)}</td><td>${fmt(r.use.toFixed(1))}</td><td>${fmt(r.defect)}</td><td>${(r.defect/r.prod*100||0).toFixed(2)}%</td><td>${r.worker}</td></tr>`).join('')||'<tr><td colspan="9" class="muted">검색 결과가 없습니다.</td></tr>'}
 const conditions=[
  ['달바 화이트 트러플 세럼','멀티 셀 라인','10파이','벌크 1250 / 노즐 150','에어펌프','SUS필터 사용, 단상자 없음','2026-09-15'],
@@ -251,7 +251,15 @@ function saveMaterials(){}
 function renderMaterials(){document.getElementById('materialBody').innerHTML=materials.map(m=>`<tr><td>${m.date.slice(5)}</td><td>${m.line}라인</td><td>${m.product}</td><td>${fmt(m.bulk)} KG</td><td><span class="status ${m.status==='완료'?'done':m.status==='요청'?'ready':'running'}">${m.status}</span></td><td>${m.worker}</td></tr>`).join('')}
 function openMaterial(){document.getElementById('materialModal').classList.add('show')}
 function closeMaterial(){document.getElementById('materialModal').classList.remove('show')}
-function addMaterial(e){e.preventDefault();materials.unshift({date:today,line:+mline.value,product:mproduct.value,bulk:+mbulk.value||0,status:'요청',worker:mworker.value||'미입력'});saveMaterials();renderMaterials();closeMaterial();e.target.reset();toast('✓ 자재 요청이 등록되었습니다.')}
+async function addMaterial(e){
+ e.preventDefault();
+ const m={date:today,line:+mline.value,product:mproduct.value,bulk:+mbulk.value||0,status:'요청',worker:mworker.value||'미입력',memo:''};
+ try{
+   await insertMaterialToDB(m);
+   await loadMaterialsFromDB();
+   closeMaterial();e.target.reset();toast('✓ 자재 요청이 온라인 DB에 저장되었습니다.');
+ }catch(err){console.error(err);toast('저장 오류: '+err.message);}
+}
 function renderStats(){let total=records.reduce((a,r)=>a+r.prod,0),use=records.reduce((a,r)=>a+r.use,0),def=records.reduce((a,r)=>a+r.defect,0);document.getElementById('statCards').innerHTML=`<div class="card"><div class="label">누적 생산량</div><div class="big">${fmt(total)} EA</div></div><div class="card"><div class="label">누적 사용량</div><div class="big">${fmt(use.toFixed(1))} KG</div></div><div class="card"><div class="label">누적 불량률</div><div class="big">${(def/total*100||0).toFixed(2)}%</div></div>`;let vals=lines.map(l=>records.filter(r=>r.line===l.no).reduce((a,r)=>a+r.prod,0)),max=Math.max(...vals,1);document.getElementById('lineChart').innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${Math.max(8,v/max*150)}px"><b>${Math.round(v/1000)}K</b><small>${i+1}라인</small></div>`).join('')}
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2200)}
 init();
