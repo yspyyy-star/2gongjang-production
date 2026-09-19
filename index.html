@@ -22,7 +22,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.app{di
 .line-head{display:flex;justify-content:space-between;align-items:center}.line-name{font-weight:800}.product{font-size:14px;font-weight:700;margin:12px 0 8px}.muted{color:var(--muted)}.mini{font-size:12px;color:var(--muted);line-height:1.8}.progress{height:7px;background:#edf1f6;border-radius:20px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;background:var(--blue);border-radius:20px}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px 8px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--muted);font-size:11px;background:#fafbfd}tr:hover td{background:#fafcff}
 .form{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #d9e0ea;border-radius:9px;background:#fff}.field textarea{min-height:85px;resize:vertical}.full{grid-column:1/-1}
-.danger{background:#fff;color:var(--red);border:1px solid #fecaca;padding:10px 14px;border-radius:9px;font-weight:700}.record-row{border-top:1px solid var(--line);padding:13px 0}.record-row:first-child{border-top:0}.record-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}.primary{background:var(--blue);color:#fff;padding:12px 18px;border-radius:9px;font-weight:700}.secondary{background:#fff;border:1px solid #d9e0ea;padding:11px 15px;border-radius:9px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.danger{background:#fff;color:var(--red);border:1px solid #fecaca;padding:10px 14px;border-radius:9px;font-weight:700}.line-box{width:min(1120px,100%)}.line-workspace{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}.line-workspace #productionSection{margin-top:15px!important;background:#f8fafc}.line-workspace .form{grid-template-columns:1fr}.line-workspace .full{grid-column:1}@media(max-width:820px){.line-workspace{grid-template-columns:1fr}}.calculated{display:block;padding:12px;background:#f1f5f9;border-radius:9px;min-height:43px;font-weight:700}.record-row{border-top:1px solid var(--line);padding:13px 0}.record-row:first-child{border-top:0}.record-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}.primary{background:var(--blue);color:#fff;padding:12px 18px;border-radius:9px;font-weight:700}.secondary{background:#fff;border:1px solid #d9e0ea;padding:11px 15px;border-radius:9px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.toolbar input,.toolbar select{padding:10px;border:1px solid #d9e0ea;border-radius:8px;background:#fff}
 .alert{padding:12px 14px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;margin-top:10px;font-size:13px}
 .mobile-nav{display:none}
@@ -30,7 +30,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px 8px;
 .toast{position:fixed;right:20px;bottom:20px;background:var(--navy);color:#fff;padding:13px 17px;border-radius:9px;display:none;z-index:10}
 .chart{height:190px;display:flex;align-items:end;gap:12px;padding:10px 5px 0}.bar{flex:1;background:var(--blue);border-radius:5px 5px 0 0;min-height:8px;position:relative}.bar b{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:10px;white-space:nowrap}.bar small{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);color:var(--muted);white-space:nowrap}
 @media(max-width:1200px){.cards{grid-template-columns:repeat(3,1fr)}.line-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.sidebar{display:none}.main{margin:0;width:100%;padding:16px 14px 78px}.top h1{font-size:20px}.top .user{display:none}.cards{grid-template-columns:repeat(2,1fr);gap:8px}.card{padding:13px}.big{font-size:20px}.grid2{grid-template-columns:1fr}.line-grid{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}.mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:4}.mobile-nav button{background:#fff;padding:9px 3px;color:#64748b;font-size:10px}.mobile-nav button.active{color:var(--blue);font-weight:800}.mobile-nav span{display:block;font-size:18px;margin-bottom:2px}}
+@media(max-width:760px){.sidebar{display:none}.main{margin:0;width:100%;padding:16px 14px 78px}.top h1{font-size:20px}.top .user{display:none}.cards{grid-template-columns:repeat(2,1fr);gap:8px}.card{padding:13px}.big{font-size:20px}.grid2{grid-template-columns:1fr}.line-grid{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}.mobile-nav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:4}.mobile-nav button{background:#fff;padding:9px 3px;color:#64748b;font-size:10px}.mobile-nav button.active{color:var(--blue);font-weight:800}.mobile-nav span{display:block;font-size:18px;margin-bottom:2px}}
 </style>
 </head>
 <body>
@@ -40,7 +40,6 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px 8px;
   <nav class="nav">
     <button class="active" onclick="showPage('dashboard',this)"><span>⌂</span>대시보드</button>
     <button onclick="showPage('lines',this)"><span>🏭</span>라인현황</button>
-    <button onclick="showPage('input',this)"><span>＋</span>생산실적 입력</button>
     <button onclick="showPage('history',this)"><span>▤</span>생산이력</button>
     <button onclick="showPage('conditions',this)"><span>⚙</span>작업조건 이력</button>
     <button onclick="showPage('materials',this)"><span>📦</span>벌크·자재 요청</button>
@@ -60,25 +59,8 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px 8px;
   </section>
 
   <section id="lines" class="page">
-    <div class="section"><h2>8개 라인 실시간 현황</h2><div class="line-grid" id="lineGrid"></div></div>
-  </section>
+    <div class="section"><h2>10개 라인 현황</h2><p class="muted" style="font-size:13px">라인을 누르면 현황과 생산실적을 한 화면에서 입력할 수 있습니다. 라인 내용을 지워도 생산이력은 남습니다.</p><div class="line-grid" id="lineGrid"><div class="line-card" onclick="openLine(1)"><div class="line-head"><span class="line-name">1라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(2)"><div class="line-head"><span class="line-name">2라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(3)"><div class="line-head"><span class="line-name">3라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(4)"><div class="line-head"><span class="line-name">4라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(5)"><div class="line-head"><span class="line-name">5라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(6)"><div class="line-head"><span class="line-name">6라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(7)"><div class="line-head"><span class="line-name">7라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(8)"><div class="line-head"><span class="line-name">8라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(9)"><div class="line-head"><span class="line-name">9라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div><div class="line-card" onclick="openLine(10)"><div class="line-head"><span class="line-name">10라인</span><span class="status wait">대기</span></div><div class="product">품목 미등록</div></div></div></div>
 
-  <section id="input" class="page">
-    <div class="section">
-      <h2>생산실적 입력</h2>
-      <form id="productionForm" class="form">
-        <div class="field"><label>날짜</label><input id="fdate" type="date" required></div>
-        <div class="field"><label>라인</label><select id="fline"></select></div>
-        <div class="field"><label>품목</label><select id="fproduct"></select></div>
-        <div class="field"><label>로트번호</label><input id="flot" placeholder="예: 2F174I" required></div>
-        <div class="field"><label>오늘 생산량 (EA)</label><input id="fprod" type="number" min="0" required></div>
-        <div class="field"><label>오늘 사용량 (KG)</label><input id="fuse" type="number" min="0" step="0.1" required></div>
-        <div class="field"><label>불량수량 (EA)</label><input id="fdefect" type="number" min="0" value="0"></div>
-        <div class="field"><label>작업자</label><input id="fworker" placeholder="작업자명"></div>
-        <div class="field full"><label>특이사항</label><textarea id="fmemo" placeholder="아이마크, 누액, 캡핑, 충진 등 특이사항을 입력하세요."></textarea></div>
-        <div class="full actions"><button type="reset" class="secondary">초기화</button><button class="primary">생산실적 저장</button></div>
-      </form>
-    </div>
   </section>
 
   <section id="history" class="page">
@@ -105,18 +87,32 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px 8px;
     <div class="section"><h2>통계분석</h2><div class="cards" style="margin-bottom:18px" id="statCards"></div><h2>라인별 누적 생산량</h2><div class="chart" id="lineChart"></div></div>
   </section>
 </main>
+<datalist id="productOptions"></datalist>
 </div>
 <div class="mobile-nav">
   <button class="active" onclick="showPage('dashboard',this)"><span>⌂</span>홈</button>
   <button onclick="showPage('lines',this)"><span>🏭</span>라인</button>
-  <button onclick="showPage('input',this)"><span>＋</span>입력</button>
   <button onclick="showPage('history',this)"><span>▤</span>이력</button>
   <button onclick="showPage('materials',this)"><span>☰</span>더보기</button>
 </div>
 
-<div class="modal" id="lineModal"><div class="modal-box"><div class="modal-top"><h2 id="modalTitle">라인 상세</h2><button class="close" onclick="closeModal()">닫기</button></div><div id="modalBody"></div></div></div>
+<div class="modal" id="lineModal"><div class="modal-box line-box"><div class="modal-top"><h2 id="modalTitle">라인 상세</h2><button class="close" onclick="closeModal()">닫기</button></div><div class="line-workspace"><div id="modalBody"></div>    <div class="section" id="productionSection" style="margin-top:16px">
+      <h2>생산실적 입력</h2>
+      <form id="productionForm" class="form">
+        <div class="field"><label>날짜</label><input id="fdate" type="date" required></div>
+        <div class="field"><label>라인</label><select id="fline"></select></div>
+        <div class="field"><label>품목</label><input id="fproduct" list="productOptions" required placeholder="제품명을 입력하세요"></div>
+        <div class="field"><label>로트번호</label><input id="flot" placeholder="예: 2F174I" required></div>
+        <div class="field"><label>오늘 생산량 (EA)</label><input id="fprod" type="number" min="0" required></div>
+        <div class="field"><label>오늘 사용량 (KG)</label><input id="fuse" type="number" min="0" step="0.1" required></div>
+        <div class="field"><label>불량수량 (EA)</label><input id="fdefect" type="number" min="0" value="0"></div>
+        <div class="field"><label>작업자</label><input id="fworker" placeholder="작업자명"></div>
+        <div class="field full"><label>특이사항</label><textarea id="fmemo" placeholder="아이마크, 누액, 캡핑, 충진 등 특이사항을 입력하세요."></textarea></div>
+        <div class="full actions"><button type="reset" class="secondary">초기화</button><button class="primary">생산실적 저장</button></div>
+      </form>
+    </div></div></div></div>
 <div class="modal" id="materialModal"><div class="modal-box"><div class="modal-top"><h2>벌크·자재 요청</h2><button class="close" onclick="closeMaterial()">닫기</button></div><form id="materialForm" class="form" style="margin-top:15px">
-<div class="field"><label>라인</label><select id="mline"></select></div><div class="field"><label>품목</label><select id="mproduct"></select></div><div class="field"><label>벌크 필요량 (KG)</label><input id="mbulk" type="number" step="0.1"></div><div class="field"><label>요청자</label><input id="mworker"></div><div class="field full"><label>비고</label><textarea id="mmemo"></textarea></div><div class="full actions"><button type="button" class="secondary" onclick="closeMaterial()">취소</button><button class="primary">요청 저장</button></div></form></div></div>
+<div class="field"><label>라인</label><select id="mline"></select></div><div class="field"><label>품목</label><input id="mproduct" list="productOptions" placeholder="제품명을 입력하세요"></div><div class="field"><label>벌크 필요량 (KG)</label><input id="mbulk" type="number" step="0.1"></div><div class="field"><label>요청자</label><input id="mworker"></div><div class="field full"><label>비고</label><textarea id="mmemo"></textarea></div><div class="full actions"><button type="button" class="secondary" onclick="closeMaterial()">취소</button><button class="primary">요청 저장</button></div></form></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -158,12 +154,6 @@ async function updateRecordInDB(id,r){
   if(error) throw error;
   if(!data?.length) throw new Error('수정된 데이터가 없습니다. DB 수정 권한을 확인하세요.');
 }
-async function deleteRecordFromDB(id){
-  const {data,error}=await supabaseClient.from('production_records').delete().eq('id',id).select('id');
-  if(error) throw error;
-  if(!data?.length) throw new Error('삭제된 데이터가 없습니다. DB 삭제 권한을 확인하세요.');
-}
-
 async function loadMaterialsFromDB(){
   const {data,error}=await supabaseClient.from('material_requests')
     .select('*').order('created_at',{ascending:false});
@@ -184,17 +174,37 @@ async function insertMaterialToDB(m){
 }
 
 const today=new Date().toISOString().slice(0,10);
-const lines=[
- {no:1,status:'running',product:'칼슘 다크서클 아이크림',lot:'2F171I',target:100000,current:51588,speed:25,end:'10:40',fill:'100 EA'},
- {no:2,status:'running',product:'노크 퍼밍 바디 버터',lot:'2F171I',target:15000,current:15840,speed:18,end:'완료',fill:'201.5 g'},
- {no:3,status:'running',product:'메디큐브 엑소좀 앰플',lot:'2F174I',target:132000,current:88900,speed:25,end:'11:20',fill:'50.0 g'},
- {no:4,status:'ready',product:'메디큐브 제로 모공 토너',lot:'2F175I',target:80000,current:0,speed:28,end:'-',fill:'150 g'},
- {no:5,status:'running',product:'시오레 NMN 세럼',lot:'2F181I',target:90000,current:63800,speed:28,end:'12:10',fill:'30 g'},
- {no:6,status:'running',product:'달바 화이트 트러플 세럼',lot:'2F184I',target:120000,current:73500,speed:30,end:'13:00',fill:'100 ml'},
- {no:7,status:'wait',product:'대기',lot:'-',target:0,current:0,speed:0,end:'-',fill:'-'},
- {no:8,status:'done',product:'완료 작업',lot:'2F160I',target:50000,current:50000,speed:26,end:'완료',fill:'50 g'}
-];
-const products=[...new Set(lines.map(x=>x.product).filter(x=>x!=='대기'&&x!=='완료 작업'))];
+const lines=Array.from({length:10},(_,i)=>({no:i+1}));
+let lineStates=[];
+let lineDBReady=false;
+async function loadLineStatesFromDB(){
+ const {data,error}=await supabaseClient.from('line_status').select('*').order('line_no');
+ if(error){console.error(error);lineDBReady=false;renderLines();toast('라인현황 DB 연결 오류: 설정 SQL을 확인해 주세요.');return}
+ lineDBReady=true;lineStates=data||[];renderLines();
+}
+async function saveLineState(no,r){
+ const payload={line_no:no,product:r.product,lot:r.lot,order_qty:r.orderQty,
+   manufacturing_kg:r.manufacturingKg,speed_per_min:r.speed,fill_g:r.fillG,
+   cumulative_qty:r.cumulative,memo:r.memo};
+ const {data,error}=await supabaseClient.from('line_status').upsert(payload,{onConflict:'line_no'}).select('line_no');
+ if(error)throw error;
+ if(!data?.length)throw new Error('저장된 데이터가 없습니다. DB 권한을 확인하세요.');
+}
+async function clearLineState(no){
+ const {data,error}=await supabaseClient.from('line_status').delete().eq('line_no',no).select('line_no');
+ if(error)throw error;
+ if(!data?.length)throw new Error('삭제된 데이터가 없습니다. DB 권한을 확인하세요.');
+}
+function lineState(no){return lineStates.find(x=>x.line_no===no)}
+function numOrNull(value){return value===''?null:Number(value)}
+function calculatedLine(x){
+ const capacity=x.manufacturing_kg!=null&&Number(x.fill_g)>0?Number(x.manufacturing_kg)*1000/Number(x.fill_g):null;
+ const remaining=x.order_qty!=null&&x.cumulative_qty!=null?Number(x.order_qty)-Number(x.cumulative_qty):null;
+ const end=remaining!=null&&Number(x.speed_per_min)>0?remaining/Number(x.speed_per_min):null;
+ const change=capacity!=null&&Number(x.speed_per_min)>0?capacity/Number(x.speed_per_min):null;
+ return {capacity,remaining,end,change};
+}
+function calcText(n,unit=''){return n==null?'—':`${Number(n.toFixed(1)).toLocaleString('ko-KR',{maximumFractionDigits:1})}${unit}`}
 let records=[];
 let activeLine=null;
 function saveRecords(){}
@@ -203,9 +213,9 @@ function statusText(s){return {running:'생산중',ready:'준비',done:'완료',
 function showPage(id,btn){
  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');
  document.querySelectorAll('.nav button,.mobile-nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');
- const titles={dashboard:'대시보드',lines:'라인현황',input:'생산실적 입력',history:'생산이력',conditions:'작업조건 이력',materials:'벌크·자재 요청',stats:'통계분석'};
+ const titles={dashboard:'대시보드',lines:'라인현황·생산실적 입력',input:'생산실적 입력',history:'생산이력',conditions:'작업조건 이력',materials:'벌크·자재 요청',stats:'통계분석'};
  document.getElementById('title').textContent=titles[id];
- if(id==='history')renderHistory(); if(id==='conditions')renderConditions(); if(id==='materials')renderMaterials(); if(id==='stats')renderStats();
+ if(id==='lines')renderLines(); if(id==='history')renderHistory(); if(id==='conditions')renderConditions(); if(id==='materials')renderMaterials(); if(id==='stats')renderStats();
 }
 async function init(){
  document.getElementById('date').textContent=`${today.replaceAll('-','.')} · 마지막 업데이트 ${new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}`;
@@ -215,9 +225,11 @@ async function init(){
    if(id==='historyLine')s.innerHTML='<option>전체 라인</option>';
    lines.forEach(l=>{if(id==='historyLine'||l.no<=8){let o=document.createElement('option');o.value=l.no;o.textContent=l.no+'라인';s.appendChild(o)}})
  });
- ['fproduct','mproduct'].forEach(id=>{const s=document.getElementById(id);products.forEach(p=>{let o=document.createElement('option');o.textContent=p;o.value=p;s.appendChild(o)})});
+
  await loadRecordsFromDB();
  await loadMaterialsFromDB();
+ await loadLineStatesFromDB();
+ document.getElementById('productOptions').innerHTML=[...new Set([...records.map(r=>r.product),...lineStates.map(r=>r.product)].filter(Boolean))].map(p=>`<option value="${esc(p)}">`).join('');
  document.getElementById('productionForm').addEventListener('submit',addRecord);
  document.getElementById('materialForm').addEventListener('submit',addMaterial);
  renderAll();
@@ -229,9 +241,9 @@ function renderKpis(){
  <div class="card"><div class="label">오늘 제조량</div><div class="big">${fmt(prod)} EA</div><div class="delta up">▲ 8.2%</div></div>
  <div class="card"><div class="label">오늘 사용량</div><div class="big">${fmt(use.toFixed(1))} KG</div><div class="delta down">▼ 3.1%</div></div>
  <div class="card"><div class="label">오늘 불량수량</div><div class="big">${fmt(defect)} EA</div><div class="delta">불량률 ${(defect/prod*100||0).toFixed(2)}%</div></div>
- <div class="card"><div class="label">가동라인</div><div class="big">${lines.filter(x=>x.status==='running').length} / 8</div></div>
- <div class="card"><div class="label">대기라인</div><div class="big">${lines.filter(x=>x.status==='wait').length} / 8</div></div>
- <div class="card"><div class="label">완료라인</div><div class="big">${lines.filter(x=>x.status==='done').length} / 8</div></div>`;
+ <div class="card"><div class="label">가동라인</div><div class="big">${lineStates.filter(x=>x.product&&x.cumulative_qty!=null&&x.order_qty!=null&&x.cumulative_qty<x.order_qty).length} / 10</div></div>
+ <div class="card"><div class="label">대기라인</div><div class="big">${10-lineStates.filter(x=>x.product).length} / 10</div></div>
+ <div class="card"><div class="label">완료라인</div><div class="big">${lineStates.filter(x=>x.product&&x.order_qty!=null&&x.cumulative_qty!=null&&x.cumulative_qty>=x.order_qty).length} / 10</div></div>`;
  const vals=[92000,105000,98000,112000,100000,100000,prod];const max=Math.max(...vals);
  document.getElementById('chart').innerHTML=vals.map((v,i)=>`<div class="bar" style="height:${v/max*150}px"><b>${Math.round(v/1000)}K</b><small>${['9/13','9/14','9/15','9/16','9/17','9/18','9/19'][i]}</small></div>`).join('');
  document.getElementById('changes').innerHTML=`<div class="card" style="margin-bottom:8px"><b>제조량</b><br><span class="muted">100,000 → ${fmt(prod)} EA</span><br><span class="up">+8,200 EA · +8.2%</span></div><div class="card" style="margin-bottom:8px"><b>사용량</b><br><span class="muted">500.0 → ${fmt(use.toFixed(1))} KG</span><br><span class="down">-15.5 KG · -3.1%</span></div><div class="card"><b>불량량</b><br><span class="muted">1,100 → ${fmt(defect)} EA</span><br><span class="up">+150 EA · +13.6%</span></div>`;
@@ -240,23 +252,63 @@ function renderKpis(){
 function lineRecords(no){return records.filter(r=>r.line===no)}
 function renderLines(){
  document.getElementById('lineGrid').innerHTML=lines.map(l=>{
-  const latest=lineRecords(l.no)[0];
+  const x=lineState(l.no),c=x?calculatedLine(x):null;
   return `<div class="line-card" role="button" tabindex="0" onclick="openLine(${l.no})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLine(${l.no})}">
-    <div class="line-head"><span class="line-name">${l.no}라인</span><span class="status ${latest?'done':'wait'}">${latest?'실적 등록':'등록 없음'}</span></div>
-    <div class="product">${latest?esc(latest.product):'등록된 실적 없음'}</div>
-    <div class="mini">${latest?`최근 작업 ${esc(latest.date)}<br>로트 ${esc(latest.lot)}<br>생산량 ${fmt(latest.prod)} EA<br>실적 ${lineRecords(l.no).length}건`:'실적을 등록하면 여기에 표시됩니다.'}</div>
+   <div class="line-head"><span class="line-name">${l.no}라인</span><span class="status ${x?.product?'running':'wait'}">${x?.product?'등록됨':'대기'}</span></div>
+   <div class="product">${x?.product?esc(x.product):'품목 미등록'}</div>
+   <div class="mini">로트 ${esc(x?.lot||'—')}<br>제조량 ${calcText(x?.manufacturing_kg,' KG')} · 충전량 ${calcText(x?.fill_g,' g')}<br>지시량 ${calcText(x?.order_qty,' EA')} · 생산 ${calcText(x?.cumulative_qty,' EA')}<br>생산가능 ${calcText(c?.capacity,' EA')} · 남은 수량 ${calcText(c?.remaining,' EA')}<br>속도 ${calcText(x?.speed_per_min,' EA/분')}<br>종료 예상 ${calcText(c?.end,'분')} · 로트 변경 ${calcText(c?.change,'분')}<br>${x?.memo?`비고 ${esc(x.memo)}`:''}</div>
   </div>`;
  }).join('');
 }
 function esc(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function openLine(no){
+ fline.value=String(no);
+ activeLine=no;const x=lineState(no)||{};
+ if(x.product){fproduct.value=x.product;flot.value=x.lot||'';}
+ document.getElementById('modalTitle').textContent=`${no}라인 · 현황 입력`;
+ document.getElementById('modalBody').innerHTML=`<form id="lineForm" class="form" style="margin-top:15px">
+ <div class="field full"><label for="lproduct">품목</label><input id="lproduct" value="${esc(x.product)}" placeholder="제품명을 입력하세요"></div>
+ <div class="field"><label for="llot">로트번호</label><input id="llot" value="${esc(x.lot)}"></div>
+ <div class="field"><label for="lorder">지시량 (EA)</label><input id="lorder" type="number" min="0" step="1" value="${x.order_qty??''}"></div>
+ <div class="field"><label for="lmanufacturing">제조량 (KG)</label><input id="lmanufacturing" type="number" min="0" step="any" value="${x.manufacturing_kg??''}"></div>
+ <div class="field"><label for="lspeed">생산속도 (EA/분)</label><input id="lspeed" type="number" min="0" step="any" value="${x.speed_per_min??''}"></div>
+ <div class="field"><label for="lfill">충전량 (g/EA)</label><input id="lfill" type="number" min="0" step="any" value="${x.fill_g??''}"></div>
+ <div class="field"><label for="lcumulative">생산수량 누적 (EA)</label><input id="lcumulative" type="number" min="0" step="1" value="${x.cumulative_qty??''}"></div>
+ <div class="field"><label>생산가능수량 (EA)</label><output id="lcapacity" class="calculated"></output></div>
+ <div class="field"><label>남은 수량 (EA)</label><output id="lremaining" class="calculated"></output></div>
+ <div class="field"><label>생산 종료 예상 (분)</label><output id="lend" class="calculated"></output></div>
+ <div class="field"><label>로트 변경 예상 (분)</label><output id="lchange" class="calculated"></output></div>
+ <div class="field full"><label for="lmemo">비고 (특이사항)</label><textarea id="lmemo">${esc(x.memo)}</textarea></div>
+ <div class="full actions"><button type="button" class="danger" onclick="removeLineState(${no})" ${x.line_no?'':'disabled'}>라인 내용 삭제</button><button type="button" class="secondary" onclick="showLineRecords(${no})">생산실적 조회·수정</button><button type="submit" class="primary">라인현황 저장</button></div>
+ </form>`;
+ const form=document.getElementById('lineForm');form.addEventListener('input',updateLineCalculations);
+ form.addEventListener('submit',async e=>{
+  e.preventDefault();const btn=form.querySelector('[type="submit"]');btn.disabled=true;
+  const r={product:lproduct.value.trim(),lot:llot.value.trim(),orderQty:numOrNull(lorder.value),manufacturingKg:numOrNull(lmanufacturing.value),speed:numOrNull(lspeed.value),fillG:numOrNull(lfill.value),cumulative:numOrNull(lcumulative.value),memo:lmemo.value.trim()};
+  if(!r.product){toast('품목을 입력해 주세요.');btn.disabled=false;return}
+  if([r.orderQty,r.cumulative].some(n=>n!=null&&!Number.isInteger(n))){toast('지시량과 생산수량은 정수로 입력해 주세요.');btn.disabled=false;return}
+  try{await saveLineState(no,r);await loadLineStatesFromDB();renderKpis();openLine(no);toast('✓ 라인현황이 저장되었습니다.')}
+  catch(err){console.error(err);toast('라인 저장 오류: '+err.message);btn.disabled=false}
+ });
+ updateLineCalculations();document.getElementById('lineModal').classList.add('show');
+}
+function updateLineCalculations(){
+ const c=calculatedLine({manufacturing_kg:numOrNull(lmanufacturing.value),fill_g:numOrNull(lfill.value),order_qty:numOrNull(lorder.value),cumulative_qty:numOrNull(lcumulative.value),speed_per_min:numOrNull(lspeed.value)});
+ lcapacity.textContent=calcText(c.capacity);lremaining.textContent=calcText(c.remaining);lend.textContent=calcText(c.end);lchange.textContent=calcText(c.change);
+}
+async function removeLineState(no){
+ if(!confirm(`${no}라인의 현황을 삭제할까요? 생산실적 이력은 유지됩니다.`))return;
+ try{await clearLineState(no);await loadLineStatesFromDB();renderKpis();openLine(no);toast('✓ 라인현황이 삭제되었습니다.')}
+ catch(err){console.error(err);toast('라인 삭제 오류: '+err.message)}
+}
+function showLineRecords(no){
  activeLine=no;
  document.getElementById('modalTitle').textContent=`${no}라인 · 생산실적`;
  const rows=lineRecords(no);
- document.getElementById('modalBody').innerHTML=rows.length?rows.map(r=>`<div class="record-row">
+ document.getElementById('modalBody').innerHTML=`<button class="secondary" onclick="openLine(${no})">← 라인현황</button>`+(rows.length?rows.map(r=>`<div class="record-row">
   <b>${esc(r.product)}</b><div class="mini">${esc(r.date)} · LOT ${esc(r.lot)}<br>생산량 ${fmt(r.prod)} EA · 사용량 ${fmt(r.use)} KG · 불량 ${fmt(r.defect)} EA<br>작업자 ${esc(r.worker)}${r.memo?`<br>특이사항 ${esc(r.memo)}`:''}</div>
-  <div class="record-actions"><button class="secondary" onclick="editRecord(${records.indexOf(r)})">수정</button><button class="danger" onclick="removeRecord(${records.indexOf(r)})">삭제</button></div>
- </div>`).join(''):'<p class="muted">등록된 생산실적이 없습니다. 생산실적 입력 화면에서 먼저 등록해 주세요.</p>';
+  <div class="record-actions"><button class="secondary" onclick="editRecord(${records.indexOf(r)})">수정</button></div>
+ </div>`).join(''):'<p class="muted">등록된 생산실적이 없습니다.</p>');
  document.getElementById('lineModal').classList.add('show');
 }
 function closeModal(){document.getElementById('lineModal').classList.remove('show');activeLine=null}
@@ -266,26 +318,21 @@ function editRecord(index){
  document.getElementById('modalBody').innerHTML=`<form id="editRecordForm" class="form" style="margin-top:15px">
   <div class="field"><label for="edate">날짜</label><input id="edate" type="date" required value="${esc(r.date)}"></div>
   <div class="field"><label for="eline">라인</label><select id="eline">${lines.map(l=>`<option value="${l.no}" ${l.no===r.line?'selected':''}>${l.no}라인</option>`).join('')}</select></div>
-  <div class="field full"><label for="eproduct">품목 (교체 제품명 입력 가능)</label><input id="eproduct" list="editProducts" required value="${esc(r.product)}"><datalist id="editProducts">${products.map(p=>`<option value="${esc(p)}">`).join('')}</datalist></div>
+  <div class="field full"><label for="eproduct">품목 (교체 제품명 입력 가능)</label><input id="eproduct" list="productOptions" required value="${esc(r.product)}"></div>
   <div class="field"><label for="elot">로트번호</label><input id="elot" required value="${esc(r.lot)}"></div>
   <div class="field"><label for="eprod">생산량 (EA)</label><input id="eprod" type="number" min="0" required value="${r.prod}"></div>
   <div class="field"><label for="euse">사용량 (KG)</label><input id="euse" type="number" min="0" step="0.1" required value="${r.use}"></div>
   <div class="field"><label for="edefect">불량수량 (EA)</label><input id="edefect" type="number" min="0" required value="${r.defect}"></div>
   <div class="field"><label for="eworker">작업자</label><input id="eworker" value="${esc(r.worker)}"></div>
   <div class="field full"><label for="ememo">특이사항</label><textarea id="ememo">${esc(r.memo)}</textarea></div>
-  <div class="full actions"><button type="button" class="secondary" onclick="openLine(activeLine)">취소</button><button class="primary" type="submit">수정 저장</button></div>
+  <div class="full actions"><button type="button" class="secondary" onclick="showLineRecords(activeLine)">취소</button><button class="primary" type="submit">수정 저장</button></div>
  </form>`;
  document.getElementById('editRecordForm').addEventListener('submit',async e=>{
   e.preventDefault();const button=e.target.querySelector('[type="submit"]');button.disabled=true;
   const updated={date:edate.value,line:+eline.value,product:eproduct.value.trim(),lot:elot.value.trim(),prod:+eprod.value,use:+euse.value,defect:+edefect.value,worker:eworker.value.trim(),memo:ememo.value.trim()};
   if(!updated.product||!updated.lot){toast('품목과 로트번호를 입력해 주세요.');button.disabled=false;return}
-  try{await updateRecordInDB(r.id,updated);await loadRecordsFromDB();const target=updated.line;openLine(target);toast('✓ 생산실적이 수정되었습니다.')}catch(err){console.error(err);toast('수정 오류: '+err.message)}finally{button.disabled=false}
+  try{await updateRecordInDB(r.id,updated);await loadRecordsFromDB();const target=updated.line;showLineRecords(target);toast('✓ 생산실적이 수정되었습니다.')}catch(err){console.error(err);toast('수정 오류: '+err.message)}finally{button.disabled=false}
  });
-}
-async function removeRecord(index){
- const r=records[index];if(!r)return;
- if(!confirm(`${r.line}라인 · ${r.product} · ${r.lot} 실적을 삭제할까요?\n삭제한 실적은 복구할 수 없습니다.`))return;
- try{await deleteRecordFromDB(r.id);await loadRecordsFromDB();openLine(r.line);toast('✓ 생산실적이 삭제되었습니다.')}catch(err){console.error(err);toast('삭제 오류: '+err.message)}
 }
 async function addRecord(e){
  e.preventDefault();
@@ -293,7 +340,7 @@ async function addRecord(e){
  try{
    await insertRecordToDB(r);
    await loadRecordsFromDB();
-   e.target.reset();fdate.value=today;toast('✓ 생산실적이 온라인 DB에 저장되었습니다.');showPage('history',document.querySelector('.nav button:nth-child(4)'));
+   e.target.reset();fdate.value=today;fline.value=String(r.line);toast('✓ 생산실적이 저장되었습니다. 생산이력에 보관됩니다.');
  }catch(err){console.error(err);toast('저장 오류: '+err.message);}
 }
 function renderHistory(){let q=(document.getElementById('searchHistory')?.value||'').toLowerCase(), line=document.getElementById('historyLine')?.value||'전체 라인';let rows=records.filter(r=>(line==='전체 라인'||r.line==line)&&`${r.product} ${r.lot} ${r.worker}`.toLowerCase().includes(q));document.getElementById('historyBody').innerHTML=rows.map(r=>`<tr><td>${r.date.slice(5)}</td><td>${r.line}라인</td><td>${r.product}</td><td>${r.lot}</td><td>${fmt(r.prod)}</td><td>${fmt(r.use.toFixed(1))}</td><td>${fmt(r.defect)}</td><td>${(r.defect/r.prod*100||0).toFixed(2)}%</td><td>${r.worker}</td></tr>`).join('')||'<tr><td colspan="9" class="muted">검색 결과가 없습니다.</td></tr>'}
